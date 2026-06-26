@@ -7,6 +7,7 @@ const widgets = [
   { title: "Finance", description: "Monitor your budget and expenses", icon: "💰", href: "#", color: "bg-yellow-500" },
   { title: "Health", description: "Log workouts, sleep, and wellness", icon: "❤️", href: "#", color: "bg-red-500" },
   { title: "Notes", description: "Capture ideas and quick notes", icon: "📝", href: "#", color: "bg-indigo-500" },
+  { title: "Destiny 2", description: "Searchable armor set bonuses & synergies database", icon: "🎮", href: "/destiny2", color: "bg-orange-500" },
 ];
 
 export default function Home() {
