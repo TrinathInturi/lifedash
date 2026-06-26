@@ -2,7 +2,13 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { ARMOR_SETS, SYNERGY_COLORS, ALL_ELEMENTS, ALL_SYNERGY_CATEGORIES, type ArmorSet, type Synergy } from "./data";
+import { ARMOR_SETS, SYNERGY_COLORS, ALL_ELEMENTS, ALL_SYNERGY_CATEGORIES, SOURCE_TYPE_STYLES, type ArmorSet, type Synergy, type SourceType } from "./data";
+
+const ALL_SOURCE_TYPES: SourceType[] = [
+  "Master Lost Sectors", "Vanguard", "Crucible", "Iron Banner",
+  "Trials of Osiris", "Gambit", "Master Raid", "Master Dungeon",
+  "Sparrow Racing", "Other",
+];
 
 const ELEMENT_ICONS: Record<string, string> = {
   Solar: "☀️",
@@ -62,6 +68,15 @@ function ArmorCard({ set }: { set: ArmorSet }) {
           )}
         </div>
 
+        {(() => {
+          const st = SOURCE_TYPE_STYLES[set.sourceType];
+          return (
+            <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium mb-2 ${st.bg} ${st.text}`}>
+              {st.icon} {set.sourceType}
+            </div>
+          );
+        })()}
+
         <div className="flex flex-wrap gap-1 mb-3">
           {set.synergies.map((s) => (
             <SynergyBadge key={s} synergy={s} />
@@ -83,7 +98,7 @@ function ArmorCard({ set }: { set: ArmorSet }) {
       </div>
 
       {expanded && (
-        <div className="px-4 py-2 bg-gray-900/50 border-t border-gray-700">
+        <div className="px-4 py-2 bg-gray-900/50 border-t border-gray-700 space-y-1">
           <p className="text-xs text-gray-500">
             <span className="text-gray-400 font-semibold">SOURCE  </span>
             {set.source}
@@ -102,6 +117,7 @@ export default function Destiny2Page() {
   const [search, setSearch] = useState("");
   const [selectedElement, setSelectedElement] = useState<string | null>(null);
   const [selectedSynergy, setSelectedSynergy] = useState<string | null>(null);
+  const [selectedSourceType, setSelectedSourceType] = useState<SourceType | null>(null);
   const [notableOnly, setNotableOnly] = useState(false);
 
   const filtered = useMemo(() => {
@@ -109,6 +125,7 @@ export default function Destiny2Page() {
       if (notableOnly && !set.notable) return false;
       if (selectedElement && set.element !== selectedElement) return false;
       if (selectedSynergy && !set.synergies.includes(selectedSynergy as Synergy)) return false;
+      if (selectedSourceType && set.sourceType !== selectedSourceType) return false;
       if (search) {
         const q = search.toLowerCase();
         return (
@@ -121,19 +138,21 @@ export default function Destiny2Page() {
       }
       return true;
     });
-  }, [search, selectedElement, selectedSynergy, notableOnly]);
+  }, [search, selectedElement, selectedSynergy, selectedSourceType, notableOnly]);
 
   const clearFilters = () => {
     setSearch("");
     setSelectedElement(null);
     setSelectedSynergy(null);
+    setSelectedSourceType(null);
     setNotableOnly(false);
   };
 
-  const hasFilters = search || selectedElement || selectedSynergy || notableOnly;
+  const hasFilters = search || selectedElement || selectedSynergy || selectedSourceType || notableOnly;
 
   return (
     <div className="min-h-screen bg-gray-950 text-white">
+      {/* Header */}
       <header className="sticky top-0 z-10 bg-gray-950/95 backdrop-blur border-b border-gray-800 px-4 py-4">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center gap-3 mb-4">
@@ -161,6 +180,8 @@ export default function Destiny2Page() {
               </button>
             )}
           </div>
+
+          {/* Search */}
           <div className="mt-3 relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">🔍</span>
             <input
@@ -184,7 +205,9 @@ export default function Destiny2Page() {
 
       <div className="max-w-7xl mx-auto px-4 py-6">
         <div className="flex flex-col lg:flex-row gap-6">
+          {/* Sidebar Filters */}
           <aside className="lg:w-56 shrink-0 space-y-5">
+            {/* Notable toggle */}
             <div>
               <button
                 onClick={() => setNotableOnly(!notableOnly)}
@@ -197,6 +220,8 @@ export default function Destiny2Page() {
                 ★ Notable Synergies Only
               </button>
             </div>
+
+            {/* Element filter */}
             <div>
               <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Element</h3>
               <div className="space-y-1">
@@ -216,6 +241,33 @@ export default function Destiny2Page() {
                 ))}
               </div>
             </div>
+
+            {/* Source Type filter */}
+            <div>
+              <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Source / Destination</h3>
+              <div className="space-y-1">
+                {ALL_SOURCE_TYPES.map((st) => {
+                  const style = SOURCE_TYPE_STYLES[st];
+                  const isSelected = selectedSourceType === st;
+                  return (
+                    <button
+                      key={st}
+                      onClick={() => setSelectedSourceType(isSelected ? null : st)}
+                      className={`w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors flex items-center gap-2 ${
+                        isSelected
+                          ? `${style.bg} ${style.text} font-medium`
+                          : "text-gray-400 hover:text-gray-200 hover:bg-gray-800"
+                      }`}
+                    >
+                      <span>{style.icon}</span>
+                      {st}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Synergy filter */}
             {Object.entries(ALL_SYNERGY_CATEGORIES).map(([category, synergies]) => (
               <div key={category}>
                 <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{category}</h3>
@@ -240,6 +292,7 @@ export default function Destiny2Page() {
             ))}
           </aside>
 
+          {/* Grid */}
           <main className="flex-1 min-w-0">
             {filtered.length === 0 ? (
               <div className="text-center py-20 text-gray-600">
@@ -260,6 +313,7 @@ export default function Destiny2Page() {
           </main>
         </div>
 
+        {/* Notable Synergies Legend */}
         <section className="mt-10 bg-gray-900 border border-gray-800 rounded-xl p-5">
           <h2 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Notable Synergy Groups</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs text-gray-400">
