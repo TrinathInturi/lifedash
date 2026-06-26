@@ -1,23 +1,49 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #ffffff;
-  --bg-subtle: #fafafa;
-  --bg-muted: #f4f4f5;
-  --border: #e4e4e7;
-  --text: #09090b;
-  --text-muted: #71717a;
-  --text-subtle: #a1a1aa;
+  /* Light mode */
+  --nm-bg: #e8ecf1;
+  --nm-bg-card: #edf0f5;
+  --nm-text: #1a1d2e;
+  --nm-text-muted: #5a6285;
+  --nm-text-subtle: #8892b0;
+  --nm-accent: #00c98d;
+  --nm-accent-glow: rgba(0, 201, 141, 0.25);
+  --nm-accent2: #f06292;
+  --nm-success: #00c98d;
+  --nm-danger: #f06292;
+
+  --nm-shadow-dark: #b8bfcc;
+  --nm-shadow-light: #ffffff;
+
+  --shadow-raised: 8px 8px 16px var(--nm-shadow-dark), -8px -8px 16px var(--nm-shadow-light);
+  --shadow-raised-lg: 14px 14px 28px var(--nm-shadow-dark), -14px -14px 28px var(--nm-shadow-light);
+  --shadow-raised-sm: 4px 4px 10px var(--nm-shadow-dark), -4px -4px 10px var(--nm-shadow-light);
+  --shadow-inset: inset 4px 4px 10px var(--nm-shadow-dark), inset -4px -4px 10px var(--nm-shadow-light);
+  --shadow-inset-sm: inset 2px 2px 6px var(--nm-shadow-dark), inset -2px -2px 6px var(--nm-shadow-light);
 }
 
 html.dark {
-  --bg: #09090b;
-  --bg-subtle: #111113;
-  --bg-muted: #18181b;
-  --border: #27272a;
-  --text: #fafafa;
-  --text-muted: #a1a1aa;
-  --text-subtle: #52525b;
+  /* Dark premium neumorphic (matches reference design) */
+  --nm-bg: #1a1d2e;
+  --nm-bg-card: #1e2235;
+  --nm-text: #e8eaf4;
+  --nm-text-muted: #8892b0;
+  --nm-text-subtle: #4a5270;
+  --nm-accent: #00d68f;
+  --nm-accent-glow: rgba(0, 214, 143, 0.2);
+  --nm-accent2: #f06292;
+  --nm-success: #00d68f;
+  --nm-danger: #f06292;
+
+  --nm-shadow-dark: #111320;
+  --nm-shadow-light: #252a42;
+
+  --shadow-raised: 8px 8px 16px var(--nm-shadow-dark), -8px -8px 16px var(--nm-shadow-light);
+  --shadow-raised-lg: 14px 14px 28px var(--nm-shadow-dark), -14px -14px 28px var(--nm-shadow-light);
+  --shadow-raised-sm: 4px 4px 10px var(--nm-shadow-dark), -4px -4px 10px var(--nm-shadow-light);
+  --shadow-inset: inset 4px 4px 10px var(--nm-shadow-dark), inset -4px -4px 10px var(--nm-shadow-light);
+  --shadow-inset-sm: inset 2px 2px 6px var(--nm-shadow-dark), inset -2px -2px 6px var(--nm-shadow-light);
 }
 
 @theme inline {
@@ -32,8 +58,65 @@ html.dark {
 }
 
 body {
-  background: var(--bg);
-  color: var(--text);
+  background: var(--nm-bg);
+  color: var(--nm-text);
   font-family: var(--font-geist-sans, "Inter", system-ui, sans-serif);
-  transition: background 0.2s, color 0.2s;
+  transition: background 0.3s, color 0.3s;
+  min-height: 100vh;
+}
+
+/* ───── Neumorphic utilities ───── */
+
+.nm-surface {
+  background: var(--nm-bg-card);
+  box-shadow: var(--shadow-raised);
+  border-radius: 20px;
+}
+
+.nm-raised {
+  background: var(--nm-bg);
+  box-shadow: var(--shadow-raised);
+  border-radius: 20px;
+}
+
+.nm-raised-lg {
+  background: var(--nm-bg);
+  box-shadow: var(--shadow-raised-lg);
+  border-radius: 24px;
+}
+
+.nm-raised-sm {
+  background: var(--nm-bg);
+  box-shadow: var(--shadow-raised-sm);
+  border-radius: 12px;
+}
+
+.nm-inset {
+  background: var(--nm-bg);
+  box-shadow: var(--shadow-inset);
+  border-radius: 20px;
+}
+
+.nm-inset-sm {
+  background: var(--nm-bg);
+  box-shadow: var(--shadow-inset-sm);
+  border-radius: 12px;
+}
+
+/* Accent glow pill */
+.nm-accent-pill {
+  background: var(--nm-accent-glow);
+  color: var(--nm-accent);
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Divider */
+.nm-divider {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--nm-shadow-light) 30%, var(--nm-shadow-dark) 70%, transparent);
+  opacity: 0.3;
 }

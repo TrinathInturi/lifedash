@@ -18,7 +18,7 @@ const ELEMENT_ICONS: Record<string, string> = {
 function Badge({ children, color }: { children: React.ReactNode; color?: string }) {
   return (
     <span
-      className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium text-white leading-none"
+      className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold text-white leading-none"
       style={{ backgroundColor: color ?? "#71717a" }}
     >
       {children}
@@ -32,25 +32,31 @@ function ArmorCard({ set }: { set: ArmorSet }) {
 
   return (
     <div
-      className="border border-[var(--border)] rounded-lg bg-[var(--bg)] hover:border-[var(--text-subtle)] transition-colors cursor-pointer"
+      className={`nm-surface cursor-pointer transition-all ${open ? "shadow-[var(--shadow-inset)]" : "hover:shadow-[var(--shadow-raised-lg)]"}`}
       onClick={() => setOpen(!open)}
     >
-      <div className="p-4">
-        <div className="flex items-start justify-between gap-2 mb-2">
+      <div className="p-5">
+        <div className="flex items-start justify-between gap-2 mb-3">
           <div className="min-w-0">
-            <div className="flex items-center gap-1.5 mb-0.5">
+            <div className="flex items-center gap-1.5 mb-1">
               {set.element && (
-                <span className="text-[var(--text-subtle)] text-xs">{ELEMENT_ICONS[set.element]}</span>
+                <span className="text-xs" style={{ color: "var(--nm-accent)" }}>{ELEMENT_ICONS[set.element]}</span>
               )}
-              <h3 className="text-sm font-medium text-[var(--text)] truncate">{set.name}</h3>
+              <h3 className="text-sm font-semibold truncate" style={{ color: "var(--nm-text)" }}>{set.name}</h3>
               {set.notable && (
-                <span className="text-[10px] text-amber-500 font-medium shrink-0">★</span>
+                <span className="text-xs shrink-0" style={{ color: "var(--nm-accent)" }}>★</span>
               )}
             </div>
-            <span className="text-[10px] text-[var(--text-subtle)]">{src.icon} {set.sourceType}</span>
+            <div className="flex items-center gap-1.5">
+              <span className="text-[10px]" style={{ color: "var(--nm-text-subtle)" }}>{src.icon}</span>
+              <span className="text-[10px]" style={{ color: "var(--nm-text-subtle)" }}>{set.sourceType}</span>
+            </div>
           </div>
           {set.element && (
-            <span className="shrink-0 text-[10px] text-[var(--text-subtle)] border border-[var(--border)] px-1.5 py-0.5 rounded font-mono">
+            <span
+              className="nm-inset-sm shrink-0 text-[10px] px-2 py-1 font-mono font-medium"
+              style={{ color: "var(--nm-accent)", background: "var(--nm-accent-glow)" }}
+            >
               {set.element}
             </span>
           )}
@@ -62,26 +68,26 @@ function ArmorCard({ set }: { set: ArmorSet }) {
           ))}
         </div>
 
-        <p className="text-xs text-[var(--text-muted)] leading-relaxed">
-          <span className="text-[var(--text-subtle)] font-medium mr-1">2pc</span>
+        <p className="text-xs leading-relaxed" style={{ color: "var(--nm-text-muted)" }}>
+          <span className="font-semibold mr-1" style={{ color: "var(--nm-text-subtle)" }}>2pc</span>
           {set.twoPiece}
         </p>
 
         {open && (
-          <div className="mt-2 pt-2 border-t border-[var(--border)] space-y-1.5">
-            <p className="text-xs text-[var(--text-muted)] leading-relaxed">
-              <span className="text-[var(--text-subtle)] font-medium mr-1">4pc</span>
+          <div className="mt-3 pt-3 space-y-2" style={{ borderTop: "1px solid rgba(128,128,160,0.1)" }}>
+            <p className="text-xs leading-relaxed" style={{ color: "var(--nm-text-muted)" }}>
+              <span className="font-semibold mr-1" style={{ color: "var(--nm-text-subtle)" }}>4pc</span>
               {set.fourPiece}
             </p>
-            <p className="text-xs text-[var(--text-subtle)]">
-              <span className="font-medium mr-1">Source</span>
+            <p className="text-xs" style={{ color: "var(--nm-text-subtle)" }}>
+              <span className="font-semibold mr-1">Source</span>
               {set.source}
             </p>
           </div>
         )}
       </div>
-      <div className="px-4 py-2 border-t border-[var(--border)] bg-[var(--bg-subtle)] rounded-b-lg">
-        <span className="text-[10px] text-[var(--text-subtle)]">{open ? "▲ collapse" : "▼ expand"}</span>
+      <div className="px-5 py-2.5 rounded-b-[20px]" style={{ borderTop: "1px solid rgba(128,128,160,0.08)" }}>
+        <span className="text-[10px] font-medium" style={{ color: "var(--nm-accent)" }}>{open ? "▲ collapse" : "▼ expand"}</span>
       </div>
     </div>
   );
@@ -116,123 +122,136 @@ export default function Destiny2Page() {
   const hasFilters = search || element || synergy || sourceType || notable;
 
   return (
-    <div className="flex-1 flex flex-col">
-      <header className="border-b border-[var(--border)] sticky top-0 z-10 bg-[var(--bg)]/95 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-6 h-12 flex items-center justify-between gap-4">
+    <div className="flex-1 flex flex-col px-5 py-6" style={{ background: "var(--nm-bg)" }}>
+      <div className="max-w-7xl mx-auto w-full space-y-5">
+
+        {/* Header */}
+        <div className="nm-surface px-5 py-3.5 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 min-w-0">
-            <Link href="/" className="text-xs text-[var(--text-subtle)] hover:text-[var(--text-muted)] transition-colors shrink-0">
+            <Link
+              href="/"
+              className="nm-raised-sm px-3 py-1.5 text-xs font-medium transition-all active:shadow-[var(--shadow-inset-sm)] shrink-0"
+              style={{ color: "var(--nm-text-muted)" }}
+            >
               ← Back
             </Link>
-            <span className="text-[var(--border)]">|</span>
-            <span className="text-sm font-medium text-[var(--text)] truncate">Destiny 2 — Armor Database</span>
-            <span className="text-xs text-[var(--text-subtle)] shrink-0">
-              {filtered.length}/{ARMOR_SETS.length}
-            </span>
+            <span style={{ color: "var(--nm-text-subtle)", opacity: 0.3 }}>|</span>
+            <span className="text-sm font-semibold truncate" style={{ color: "var(--nm-text)" }}>Destiny 2 — Armor Database</span>
+            <span className="nm-accent-pill shrink-0">{filtered.length}/{ARMOR_SETS.length}</span>
           </div>
           <div className="flex items-center gap-2 shrink-0">
             {hasFilters && (
               <button
                 onClick={clear}
-                className="text-xs text-[var(--text-subtle)] hover:text-[var(--text-muted)] transition-colors"
+                className="text-xs font-medium transition-colors"
+                style={{ color: "var(--nm-accent)" }}
               >
-                Clear
+                Clear all
               </button>
             )}
             <ThemeToggle />
           </div>
         </div>
-        <div className="max-w-7xl mx-auto px-6 pb-3">
+
+        {/* Search */}
+        <div className="nm-inset px-4 py-1 flex items-center gap-3">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ color: "var(--nm-text-subtle)", flexShrink: 0 }}>
+            <circle cx="6" cy="6" r="4.5" stroke="currentColor" strokeWidth="1.5" />
+            <path d="M9.5 9.5L12 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search armor sets, bonuses, sources…"
-            className="w-full h-8 rounded-md border border-[var(--border)] bg-[var(--bg-subtle)] px-3 text-sm text-[var(--text)] placeholder:text-[var(--text-subtle)] outline-none focus:border-[var(--text-subtle)] transition-colors"
+            className="w-full h-9 bg-transparent text-sm outline-none placeholder:opacity-30"
+            style={{ color: "var(--nm-text)" }}
           />
         </div>
-      </header>
 
-      <div className="max-w-7xl mx-auto px-6 py-6 flex gap-6 w-full">
-        <aside className="w-44 shrink-0 space-y-5">
-          <div>
+        <div className="flex gap-5 w-full">
+          {/* Sidebar */}
+          <aside className="w-44 shrink-0 space-y-5">
             <button
               onClick={() => setNotable(!notable)}
-              className={`w-full text-left text-xs px-2 py-1.5 rounded border transition-colors ${
-                notable
-                  ? "border-amber-400 text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/30"
-                  : "border-[var(--border)] text-[var(--text-muted)] hover:border-[var(--text-subtle)]"
-              }`}
+              className="w-full text-left text-xs px-3 py-2 rounded-xl font-semibold transition-all"
+              style={notable
+                ? { boxShadow: "var(--shadow-inset-sm)", background: "var(--nm-bg)", color: "var(--nm-accent)" }
+                : { boxShadow: "var(--shadow-raised-sm)", background: "var(--nm-bg)", color: "var(--nm-text-muted)" }
+              }
             >
               ★ Notable only
             </button>
-          </div>
 
-          <FilterSection label="Element">
-            {ALL_ELEMENTS.map((el) => (
-              <FilterButton
-                key={el}
-                active={element === el}
-                onClick={() => setElement(element === el ? null : el)}
-              >
-                {ELEMENT_ICONS[el]} {el}
-              </FilterButton>
-            ))}
-          </FilterSection>
-
-          <FilterSection label="Source">
-            {ALL_SOURCE_TYPES.map((st) => {
-              const s = SOURCE_TYPE_STYLES[st];
-              return (
+            <FilterSection label="Element">
+              {ALL_ELEMENTS.map((el) => (
                 <FilterButton
-                  key={st}
-                  active={sourceType === st}
-                  onClick={() => setSourceType(sourceType === st ? null : st)}
+                  key={el}
+                  active={element === el}
+                  onClick={() => setElement(element === el ? null : el)}
                 >
-                  {s.icon} {st}
+                  {ELEMENT_ICONS[el]} {el}
                 </FilterButton>
-              );
-            })}
-          </FilterSection>
+              ))}
+            </FilterSection>
 
-          {Object.entries(ALL_SYNERGY_CATEGORIES).map(([cat, syns]) => (
-            <div key={cat}>
-              <p className="text-[10px] font-medium text-[var(--text-subtle)] uppercase tracking-widest mb-1.5">{cat}</p>
-              <div className="flex flex-wrap gap-1">
-                {syns.map((s) => {
-                  const isActive = synergy === s;
-                  return (
-                    <button
-                      key={s}
-                      onClick={() => setSynergy(isActive ? null : s)}
-                      className="text-[10px] px-1.5 py-0.5 rounded font-medium text-white transition-opacity"
-                      style={{
-                        backgroundColor: SYNERGY_COLORS[s] ?? "#71717a",
-                        opacity: isActive ? 1 : 0.45,
-                      }}
-                    >
-                      {s}
-                    </button>
-                  );
-                })}
+            <FilterSection label="Source">
+              {ALL_SOURCE_TYPES.map((st) => {
+                const s = SOURCE_TYPE_STYLES[st];
+                return (
+                  <FilterButton
+                    key={st}
+                    active={sourceType === st}
+                    onClick={() => setSourceType(sourceType === st ? null : st)}
+                  >
+                    {s.icon} {st}
+                  </FilterButton>
+                );
+              })}
+            </FilterSection>
+
+            {Object.entries(ALL_SYNERGY_CATEGORIES).map(([cat, syns]) => (
+              <div key={cat}>
+                <p className="text-[10px] font-semibold uppercase tracking-widest mb-2" style={{ color: "var(--nm-text-subtle)" }}>{cat}</p>
+                <div className="flex flex-wrap gap-1">
+                  {syns.map((s) => {
+                    const isActive = synergy === s;
+                    return (
+                      <button
+                        key={s}
+                        onClick={() => setSynergy(isActive ? null : s)}
+                        className="text-[10px] px-2 py-0.5 rounded-full font-semibold text-white transition-all"
+                        style={{
+                          backgroundColor: SYNERGY_COLORS[s] ?? "#71717a",
+                          opacity: isActive ? 1 : 0.35,
+                          transform: isActive ? "scale(1.05)" : "scale(1)",
+                        }}
+                      >
+                        {s}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          ))}
-        </aside>
+            ))}
+          </aside>
 
-        <main className="flex-1 min-w-0">
-          {filtered.length === 0 ? (
-            <div className="text-center py-24">
-              <p className="text-sm text-[var(--text-muted)]">No armor sets found.</p>
-              <button onClick={clear} className="mt-2 text-xs text-[var(--text-subtle)] hover:text-[var(--text-muted)] underline transition-colors">
-                Clear filters
-              </button>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
-              {filtered.map((set) => <ArmorCard key={set.id} set={set} />)}
-            </div>
-          )}
-        </main>
+          {/* Card grid */}
+          <main className="flex-1 min-w-0">
+            {filtered.length === 0 ? (
+              <div className="nm-inset text-center py-24">
+                <p className="text-sm mb-2" style={{ color: "var(--nm-text-muted)" }}>No armor sets found.</p>
+                <button onClick={clear} className="text-xs font-semibold" style={{ color: "var(--nm-accent)" }}>
+                  Clear filters
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                {filtered.map((set) => <ArmorCard key={set.id} set={set} />)}
+              </div>
+            )}
+          </main>
+        </div>
       </div>
     </div>
   );
@@ -241,8 +260,8 @@ export default function Destiny2Page() {
 function FilterSection({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <p className="text-[10px] font-medium text-[var(--text-subtle)] uppercase tracking-widest mb-1.5">{label}</p>
-      <div className="space-y-0.5">{children}</div>
+      <p className="text-[10px] font-semibold uppercase tracking-widest mb-2" style={{ color: "var(--nm-text-subtle)" }}>{label}</p>
+      <div className="space-y-1">{children}</div>
     </div>
   );
 }
@@ -251,11 +270,11 @@ function FilterButton({ active, onClick, children }: { active: boolean; onClick:
   return (
     <button
       onClick={onClick}
-      className={`w-full text-left text-xs px-2 py-1 rounded transition-colors ${
-        active
-          ? "bg-[var(--text)] text-[var(--bg)] font-medium"
-          : "text-[var(--text-muted)] hover:bg-[var(--bg-muted)] hover:text-[var(--text)]"
-      }`}
+      className="w-full text-left text-xs px-3 py-1.5 rounded-xl font-medium transition-all"
+      style={active
+        ? { boxShadow: "var(--shadow-inset-sm)", background: "var(--nm-bg)", color: "var(--nm-accent)" }
+        : { color: "var(--nm-text-muted)" }
+      }
     >
       {children}
     </button>

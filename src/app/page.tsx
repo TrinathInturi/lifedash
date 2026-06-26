@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
@@ -11,74 +13,89 @@ const modules = [
   { title: "Destiny 2", desc: "Armor set bonuses & synergies database",     icon: "⬡",  href: "/destiny2", live: true  },
 ];
 
+const stats = [
+  { value: modules.length,                      label: "Modules",  accent: false },
+  { value: modules.filter(m => m.live).length,  label: "Live",     accent: true  },
+  { value: modules.filter(m => !m.live).length, label: "Planned",  accent: false },
+];
+
 export default function Home() {
   const today = new Date().toLocaleDateString("en-US", {
-    weekday: "long", month: "long", day: "numeric", year: "numeric",
+    weekday: "long", month: "long", day: "numeric",
   });
 
   return (
-    <main className="flex-1">
-      <header className="border-b border-[var(--border)] sticky top-0 z-10 bg-[var(--bg)]/95 backdrop-blur-sm">
-        <div className="max-w-3xl mx-auto px-6 h-12 flex items-center justify-between">
-          <span className="text-sm font-semibold tracking-tight text-[var(--text)]">LifeDash</span>
+    <main className="flex-1 px-5 pt-8 pb-4" style={{ background: "var(--nm-bg)" }}>
+      <div className="max-w-md mx-auto space-y-6">
+
+        {/* Top bar */}
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-[11px] font-medium tracking-widest uppercase mb-0.5" style={{ color: "var(--nm-text-subtle)" }}>{today}</p>
+            <h1 className="text-xl font-semibold tracking-tight" style={{ color: "var(--nm-text)" }}>LifeDash</h1>
+          </div>
           <ThemeToggle />
         </div>
-      </header>
 
-      <div className="max-w-3xl mx-auto px-6 py-12">
+        {/* Hero card */}
+        <div className="nm-surface px-6 py-6 relative overflow-hidden">
+          <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full opacity-20" style={{ background: "radial-gradient(circle, var(--nm-accent), transparent 70%)" }} />
+          <div className="absolute -bottom-4 -left-4 w-16 h-16 rounded-full opacity-10" style={{ background: "radial-gradient(circle, var(--nm-accent2), transparent 70%)" }} />
 
-        <section className="mb-10">
-          <p className="text-xs text-[var(--text-subtle)] mb-3 font-mono">{today}</p>
-          <h1 className="text-2xl font-semibold tracking-tight text-[var(--text)] mb-2">Good day</h1>
-          <p className="text-sm text-[var(--text-muted)] max-w-md">
-            Your personal life dashboard. Everything in one place.
-          </p>
-        </section>
+          <p className="text-xs mb-1" style={{ color: "var(--nm-text-subtle)" }}>Welcome back</p>
+          <p className="text-2xl font-bold mb-1" style={{ color: "var(--nm-text)" }}>Good day 👋</p>
+          <p className="text-sm" style={{ color: "var(--nm-text-muted)" }}>Your personal life dashboard.<br/>Everything in one place.</p>
+        </div>
 
-        <section className="mb-10 grid grid-cols-3 gap-px bg-[var(--border)] rounded-lg overflow-hidden border border-[var(--border)]">
-          {[
-            { n: modules.length,                       label: "Modules" },
-            { n: modules.filter(m => m.live).length,   label: "Live" },
-            { n: modules.filter(m => !m.live).length,  label: "Planned" },
-          ].map(({ n, label }) => (
-            <div key={label} className="bg-[var(--bg)] px-5 py-4">
-              <p className="text-xl font-semibold text-[var(--text)]">{n}</p>
-              <p className="text-xs text-[var(--text-subtle)] mt-0.5">{label}</p>
+        {/* Stats row */}
+        <div className="grid grid-cols-3 gap-3">
+          {stats.map(({ value, label, accent }) => (
+            <div key={label} className="nm-raised px-4 py-4 text-center">
+              <p className="text-2xl font-bold mb-0.5" style={{ color: accent ? "var(--nm-accent)" : "var(--nm-text)" }}>{value}</p>
+              <p className="text-[10px] font-medium uppercase tracking-widest" style={{ color: "var(--nm-text-subtle)" }}>{label}</p>
             </div>
           ))}
-        </section>
+        </div>
 
-        <section>
-          <p className="text-xs font-medium text-[var(--text-subtle)] uppercase tracking-widest mb-3">Modules</p>
-          <div className="border border-[var(--border)] rounded-lg divide-y divide-[var(--border)] overflow-hidden">
-            {modules.map((mod) =>
+        {/* Modules */}
+        <div>
+          <p className="text-[10px] font-medium uppercase tracking-widest mb-3 px-1" style={{ color: "var(--nm-text-subtle)" }}>Modules</p>
+          <div className="nm-raised overflow-hidden">
+            {modules.map((mod, i) =>
               mod.live ? (
                 <Link
                   key={mod.title}
                   href={mod.href}
-                  className="group flex items-center gap-4 px-5 py-3.5 bg-[var(--bg)] hover:bg-[var(--bg-subtle)] transition-colors"
+                  className="group flex items-center gap-4 px-5 py-4 transition-all"
+                  style={{ borderBottom: i < modules.length - 1 ? "1px solid rgba(128,128,160,0.08)" : "none" }}
                 >
                   <ModuleRow mod={mod} />
                 </Link>
               ) : (
-                <div key={mod.title} className="flex items-center gap-4 px-5 py-3.5 bg-[var(--bg)] opacity-50">
+                <div
+                  key={mod.title}
+                  className="flex items-center gap-4 px-5 py-4 opacity-35"
+                  style={{ borderBottom: i < modules.length - 1 ? "1px solid rgba(128,128,160,0.08)" : "none" }}
+                >
                   <ModuleRow mod={mod} />
                 </div>
               )
             )}
           </div>
-        </section>
+        </div>
 
-        <section className="mt-8">
-          <p className="text-xs font-medium text-[var(--text-subtle)] uppercase tracking-widest mb-3">Quick Note</p>
-          <div className="border border-[var(--border)] rounded-lg p-4 bg-[var(--bg-subtle)]">
+        {/* Quick note */}
+        <div>
+          <p className="text-[10px] font-medium uppercase tracking-widest mb-3 px-1" style={{ color: "var(--nm-text-subtle)" }}>Quick Note</p>
+          <div className="nm-inset px-5 py-4">
             <textarea
               disabled
               placeholder="Jot something down… (coming soon)"
-              className="w-full h-24 bg-transparent text-sm text-[var(--text)] placeholder:text-[var(--text-subtle)] resize-none outline-none"
+              className="w-full h-20 bg-transparent text-sm resize-none outline-none placeholder:opacity-40"
+              style={{ color: "var(--nm-text)", caretColor: "var(--nm-accent)" }}
             />
           </div>
-        </section>
+        </div>
 
       </div>
     </main>
@@ -88,26 +105,26 @@ export default function Home() {
 function ModuleRow({ mod }: { mod: typeof modules[0] }) {
   return (
     <>
-      <span className="w-7 h-7 flex items-center justify-center rounded-md bg-[var(--bg-muted)] text-[var(--text-muted)] text-sm font-mono shrink-0 group-hover:bg-[var(--border)] transition-colors">
+      <span
+        className="nm-raised-sm w-9 h-9 flex items-center justify-center text-base font-mono shrink-0"
+        style={{ color: mod.live ? "var(--nm-accent)" : "var(--nm-text-muted)" }}
+      >
         {mod.icon}
       </span>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-[var(--text)] leading-none">{mod.title}</p>
-        <p className="text-xs text-[var(--text-subtle)] mt-0.5 truncate">{mod.desc}</p>
+        <p className="text-sm font-semibold leading-none mb-0.5" style={{ color: "var(--nm-text)" }}>{mod.title}</p>
+        <p className="text-xs truncate" style={{ color: "var(--nm-text-muted)" }}>{mod.desc}</p>
       </div>
       <div className="shrink-0 flex items-center gap-2">
         {mod.live ? (
           <>
-            <span className="inline-flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
-              Live
-            </span>
-            <svg className="text-[var(--text-subtle)]" width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <span className="nm-accent-pill">Live</span>
+            <svg style={{ color: "var(--nm-text-subtle)" }} width="14" height="14" viewBox="0 0 14 14" fill="none">
               <path d="M5 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </>
         ) : (
-          <span className="text-xs text-[var(--text-subtle)]">Soon</span>
+          <span className="text-[10px] font-medium px-2 py-0.5 rounded-full" style={{ background: "rgba(128,128,160,0.1)", color: "var(--nm-text-subtle)" }}>Soon</span>
         )}
       </div>
     </>

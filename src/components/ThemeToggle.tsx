@@ -9,7 +9,8 @@ export function ThemeToggle() {
       onClick={toggle}
       aria-label="Toggle theme"
       title={theme === "dark" ? "Switch to light" : "Switch to dark"}
-      className="flex h-8 w-8 items-center justify-center rounded-md transition-colors hover:bg-[var(--bg-muted)] text-[var(--text-muted)] hover:text-[var(--text)]"
+      className="nm-raised-sm flex h-9 w-9 items-center justify-center transition-all active:shadow-[var(--shadow-inset-sm)]"
+      style={{ color: "var(--nm-text-muted)" }}
     >
       {theme === "dark" ? (
         <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
