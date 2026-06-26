@@ -2,212 +2,212 @@ import Link from "next/link";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 const widgets = [
-  {
-    title: "Tasks",
-    description: "Manage your daily tasks and to-dos",
-    icon: "✓",
-    href: "#",
-    gradient: "from-blue-500 to-blue-600",
-    ring: "ring-blue-500/20",
-    iconBg: "bg-blue-500",
-    tag: "Coming soon",
-  },
-  {
-    title: "Journal",
-    description: "Write and reflect on your day",
-    icon: "📓",
-    href: "#",
-    gradient: "from-purple-500 to-purple-600",
-    ring: "ring-purple-500/20",
-    iconBg: "bg-purple-500",
-    tag: "Coming soon",
-  },
-  {
-    title: "Goals",
-    description: "Track long-term goals and habits",
-    icon: "🎯",
-    href: "#",
-    gradient: "from-emerald-500 to-emerald-600",
-    ring: "ring-emerald-500/20",
-    iconBg: "bg-emerald-500",
-    tag: "Coming soon",
-  },
-  {
-    title: "Finance",
-    description: "Monitor your budget and expenses",
-    icon: "💰",
-    href: "#",
-    gradient: "from-yellow-500 to-orange-500",
-    ring: "ring-yellow-500/20",
-    iconBg: "bg-yellow-500",
-    tag: "Coming soon",
-  },
-  {
-    title: "Health",
-    description: "Log workouts, sleep, and wellness",
-    icon: "❤️",
-    href: "#",
-    gradient: "from-red-500 to-rose-600",
-    ring: "ring-red-500/20",
-    iconBg: "bg-red-500",
-    tag: "Coming soon",
-  },
-  {
-    title: "Notes",
-    description: "Capture ideas and quick notes",
-    icon: "📝",
-    href: "#",
-    gradient: "from-indigo-500 to-indigo-600",
-    ring: "ring-indigo-500/20",
-    iconBg: "bg-indigo-500",
-    tag: "Coming soon",
-  },
-  {
-    title: "Destiny 2",
-    description: "Searchable armor set bonuses & synergies database",
-    icon: "🎮",
-    href: "/destiny2",
-    gradient: "from-orange-500 to-red-500",
-    ring: "ring-orange-500/20",
-    iconBg: "bg-orange-500",
-    tag: "Live",
-  },
+  { title: "Tasks",     description: "Daily tasks and to-dos",              icon: "✓",  iconBg: "#007AFF", href: "#",         tag: "Coming soon" },
+  { title: "Journal",   description: "Write and reflect on your day",       icon: "📓", iconBg: "#AF52DE", href: "#",         tag: "Coming soon" },
+  { title: "Goals",     description: "Long-term goals and habit tracking",  icon: "🎯", iconBg: "#34C759", href: "#",         tag: "Coming soon" },
+  { title: "Finance",   description: "Budget monitoring and expenses",      icon: "💰", iconBg: "#FF9500", href: "#",         tag: "Coming soon" },
+  { title: "Health",    description: "Workouts, sleep, and wellness logs",  icon: "❤️", iconBg: "#FF3B30", href: "#",         tag: "Coming soon" },
+  { title: "Notes",     description: "Capture ideas and quick notes",       icon: "📝", iconBg: "#FF9F0A", href: "#",         tag: "Coming soon" },
+  { title: "Destiny 2", description: "Armor set bonuses & synergies",       icon: "🎮", iconBg: "#FF6B00", href: "/destiny2", tag: "Live"        },
 ];
 
 export default function Home() {
   const today = new Date().toLocaleDateString("en-US", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
+    weekday: "long", year: "numeric", month: "long", day: "numeric",
   });
 
   const liveWidgets = widgets.filter((w) => w.tag === "Live");
   const comingWidgets = widgets.filter((w) => w.tag !== "Live");
 
   return (
-    <main className="flex-1">
-      {/* Header */}
-      <header className="sticky top-0 z-20 border-b border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md px-6 py-3">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center shadow-sm">
-              <span className="text-white text-sm font-bold">L</span>
+    <main className="flex-1 min-h-screen" style={{ backgroundColor: "var(--ios-grouped-bg)" }}>
+
+      {/* iOS Navigation Bar */}
+      <nav
+        className="sticky top-0 z-30 px-4"
+        style={{
+          backgroundColor: "var(--ios-grouped-bg)",
+          borderBottom: "0.5px solid var(--ios-separator)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+        }}
+      >
+        <div className="max-w-2xl mx-auto flex items-center justify-between h-[44px]">
+          <div className="flex items-center gap-2">
+            <div
+              className="w-7 h-7 rounded-lg flex items-center justify-center text-white text-xs font-bold"
+              style={{ background: "linear-gradient(135deg, #007AFF, #5856D6)" }}
+            >
+              L
             </div>
-            <span className="font-bold text-lg text-zinc-900 dark:text-white tracking-tight">LifeDash</span>
+            <span className="font-semibold text-[17px]" style={{ color: "var(--ios-label)" }}>
+              LifeDash
+            </span>
           </div>
           <div className="flex items-center gap-3">
             <ThemeToggle />
-            <button className="px-4 py-1.5 text-sm font-medium rounded-lg bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:opacity-80 transition-opacity shadow-sm">
-              + New Block
-            </button>
           </div>
         </div>
-      </header>
+      </nav>
 
-      <div className="max-w-6xl mx-auto px-6 py-12">
-        {/* Hero */}
-        <section className="mb-12">
-          <p className="text-xs font-semibold text-violet-500 dark:text-violet-400 uppercase tracking-widest mb-2">{today}</p>
-          <h1 className="text-4xl sm:text-5xl font-black text-zinc-900 dark:text-white tracking-tight leading-tight mb-3">
+      <div className="max-w-2xl mx-auto px-4 pt-6 pb-2">
+
+        {/* Large Title */}
+        <section className="mb-6">
+          <p className="text-[13px] font-medium mb-1" style={{ color: "#007AFF" }}>{today}</p>
+          <h1 className="text-[34px] font-bold leading-tight tracking-tight" style={{ color: "var(--ios-label)" }}>
             Good day 👋
           </h1>
-          <p className="text-zinc-500 dark:text-zinc-400 text-lg max-w-xl">
-            Your personal life dashboard. Stay organized, focused, and on track.
+          <p className="text-[15px] mt-1" style={{ color: "var(--ios-label3)" }}>
+            Your personal life dashboard.
           </p>
         </section>
 
-        {/* Stats bar */}
-        <section className="mb-10 grid grid-cols-2 sm:grid-cols-4 gap-4">
-          {[
-            { label: "Total Modules", value: widgets.length.toString() },
-            { label: "Live", value: liveWidgets.length.toString() },
-            { label: "In Progress", value: "0" },
-            { label: "Coming Soon", value: comingWidgets.length.toString() },
-          ].map((stat) => (
-            <div
-              key={stat.label}
-              className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-5 py-4"
-            >
-              <p className="text-2xl font-black text-zinc-900 dark:text-white">{stat.value}</p>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5 font-medium">{stat.label}</p>
-            </div>
-          ))}
+        {/* Stats */}
+        <section className="mb-8">
+          <div className="grid grid-cols-2 gap-3">
+            {[
+              { label: "Total Modules", value: widgets.length, color: "#007AFF" },
+              { label: "Live",          value: liveWidgets.length, color: "#34C759" },
+              { label: "Coming Soon",   value: comingWidgets.length, color: "#FF9500" },
+              { label: "In Progress",   value: 0,  color: "#FF3B30" },
+            ].map((s) => (
+              <div
+                key={s.label}
+                className="rounded-2xl px-4 py-3"
+                style={{ backgroundColor: "var(--ios-grouped-bg2)" }}
+              >
+                <p className="text-[28px] font-bold leading-none" style={{ color: s.color }}>{s.value}</p>
+                <p className="text-[13px] mt-0.5" style={{ color: "var(--ios-label3)" }}>{s.label}</p>
+              </div>
+            ))}
+          </div>
         </section>
 
-        {/* Live modules */}
+        {/* Live section */}
         {liveWidgets.length > 0 && (
-          <section className="mb-10">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <h2 className="text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest">Live</h2>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {liveWidgets.map((widget) => (
-                <WidgetCard key={widget.title} widget={widget} />
+          <section className="mb-8">
+            <SectionHeader label="Live" />
+            <div
+              className="rounded-2xl overflow-hidden"
+              style={{ backgroundColor: "var(--ios-grouped-bg2)" }}
+            >
+              {liveWidgets.map((w, i) => (
+                <AppRow key={w.title} widget={w} last={i === liveWidgets.length - 1} />
               ))}
             </div>
           </section>
         )}
 
-        {/* All modules */}
-        <section className="mb-10">
-          <h2 className="text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest mb-4">All Modules</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {comingWidgets.map((widget) => (
-              <WidgetCard key={widget.title} widget={widget} />
+        {/* Coming soon section */}
+        <section className="mb-8">
+          <SectionHeader label="Coming Soon" />
+          <div
+            className="rounded-2xl overflow-hidden"
+            style={{ backgroundColor: "var(--ios-grouped-bg2)" }}
+          >
+            {comingWidgets.map((w, i) => (
+              <AppRow key={w.title} widget={w} last={i === comingWidgets.length - 1} />
             ))}
           </div>
         </section>
 
         {/* Quick Note */}
-        <section className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold text-zinc-900 dark:text-white">Quick Note</h3>
-            <span className="text-xs text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded-full">Coming soon</span>
+        <section className="mb-8">
+          <SectionHeader label="Quick Note" />
+          <div
+            className="rounded-2xl px-4 py-3"
+            style={{ backgroundColor: "var(--ios-grouped-bg2)" }}
+          >
+            <textarea
+              className="w-full h-28 text-[15px] bg-transparent resize-none outline-none placeholder:opacity-40"
+              placeholder="Start typing a note…"
+              style={{ color: "var(--ios-label)" }}
+              disabled
+            />
+            <p className="text-[12px] mt-1" style={{ color: "var(--ios-label3)" }}>
+              Coming soon
+            </p>
           </div>
-          <textarea
-            className="w-full h-28 text-sm text-zinc-700 dark:text-zinc-300 bg-transparent resize-none outline-none placeholder-zinc-400 dark:placeholder-zinc-600"
-            placeholder="Start typing a note…"
-            disabled
-          />
         </section>
+
       </div>
     </main>
   );
 }
 
-function WidgetCard({ widget }: { widget: typeof widgets[0] }) {
-  const isLive = widget.tag === "Live";
+function SectionHeader({ label }: { label: string }) {
   return (
-    <Link
-      href={widget.href}
-      className={`group relative flex items-start gap-4 p-5 rounded-2xl border transition-all duration-200
-        border-zinc-200 dark:border-zinc-800
-        bg-white dark:bg-zinc-900
-        hover:border-zinc-300 dark:hover:border-zinc-700
-        hover:shadow-lg dark:hover:shadow-zinc-950/50
-        ${!isLive ? "opacity-60 cursor-default pointer-events-none" : ""}
-      `}
+    <h2
+      className="text-[13px] font-semibold uppercase tracking-wide px-1 mb-2"
+      style={{ color: "var(--ios-label3)" }}
     >
-      <div className={`${widget.iconBg} shrink-0 w-11 h-11 rounded-xl flex items-center justify-center text-xl shadow-sm`}>
+      {label}
+    </h2>
+  );
+}
+
+function AppRow({ widget, last }: { widget: typeof widgets[0]; last: boolean }) {
+  const isLive = widget.tag === "Live";
+  const inner = (
+    <div className="flex items-center gap-3 px-4 py-3">
+      <div
+        className="w-[44px] h-[44px] rounded-[10px] flex items-center justify-center text-[22px] shrink-0"
+        style={{
+          backgroundColor: widget.iconBg,
+          boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
+        }}
+      >
         {widget.icon}
       </div>
-      <div className="min-w-0 flex-1">
-        <div className="flex items-start justify-between gap-2">
-          <h3 className="font-semibold text-zinc-900 dark:text-white group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors text-sm">
-            {widget.title}
-          </h3>
-          <span className={`shrink-0 text-xs font-medium px-2 py-0.5 rounded-full ${
-            isLive
-              ? "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400"
-              : "bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400"
-          }`}>
-            {widget.tag}
-          </span>
-        </div>
-        <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1 leading-relaxed">{widget.description}</p>
+      <div className="flex-1 min-w-0">
+        <p className="text-[17px] font-medium leading-tight" style={{ color: "var(--ios-label)" }}>
+          {widget.title}
+        </p>
+        <p className="text-[13px] leading-tight mt-0.5 truncate" style={{ color: "var(--ios-label3)" }}>
+          {widget.description}
+        </p>
       </div>
-    </Link>
+      <div className="flex items-center gap-2 shrink-0">
+        {isLive ? (
+          <>
+            <span
+              className="text-[12px] font-semibold px-2 py-0.5 rounded-full"
+              style={{ backgroundColor: "#34C75920", color: "#34C759" }}
+            >
+              Live
+            </span>
+            <svg width="8" height="13" viewBox="0 0 8 13" fill="none">
+              <path d="M1 1L7 6.5L1 12" stroke="var(--ios-label3)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </>
+        ) : (
+          <span
+            className="text-[12px] font-medium px-2 py-0.5 rounded-full"
+            style={{ backgroundColor: "var(--ios-fill3)", color: "var(--ios-label3)" }}
+          >
+            Soon
+          </span>
+        )}
+      </div>
+    </div>
+  );
+
+  return (
+    <div>
+      {isLive ? (
+        <Link href={widget.href} className="block active:opacity-60 transition-opacity">
+          {inner}
+        </Link>
+      ) : (
+        <div className="opacity-60">{inner}</div>
+      )}
+      {!last && (
+        <div
+          className="ml-[72px] h-px"
+          style={{ backgroundColor: "var(--ios-separator)" }}
+        />
+      )}
+    </div>
   );
 }
