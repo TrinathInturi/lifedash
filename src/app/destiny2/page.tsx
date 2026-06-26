@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import { ARMOR_SETS, SYNERGY_COLORS, ALL_ELEMENTS, ALL_SYNERGY_CATEGORIES, SOURCE_TYPE_STYLES, type ArmorSet, type Synergy, type SourceType } from "./data";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const ALL_SOURCE_TYPES: SourceType[] = [
   "Master Lost Sectors", "Vanguard", "Crucible", "Iron Banner",
@@ -11,103 +12,76 @@ const ALL_SOURCE_TYPES: SourceType[] = [
 ];
 
 const ELEMENT_ICONS: Record<string, string> = {
-  Solar: "☀️",
-  Void: "🌀",
-  Arc: "⚡",
-  Stasis: "❄️",
-  Strand: "🌿",
-  Prismatic: "💎",
-  Kinetic: "⚫",
+  Solar: "☀", Void: "◉", Arc: "⚡", Stasis: "❄", Strand: "∿", Prismatic: "◇", Kinetic: "●",
 };
 
-const ELEMENT_BG: Record<string, string> = {
-  Solar: "bg-orange-500/20 border-orange-500/40 text-orange-300",
-  Void: "bg-purple-600/20 border-purple-500/40 text-purple-300",
-  Arc: "bg-blue-400/20 border-blue-400/40 text-blue-300",
-  Stasis: "bg-cyan-400/20 border-cyan-400/40 text-cyan-300",
-  Strand: "bg-emerald-400/20 border-emerald-400/40 text-emerald-300",
-  Prismatic: "bg-pink-500/20 border-pink-400/40 text-pink-300",
-  Kinetic: "bg-gray-400/20 border-gray-400/40 text-gray-300",
-};
-
-function SynergyBadge({ synergy }: { synergy: Synergy }) {
-  const color = SYNERGY_COLORS[synergy] ?? "bg-gray-500";
+function Badge({ children, color }: { children: React.ReactNode; color?: string }) {
   return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium text-white ${color}`}>
-      {synergy}
+    <span
+      className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium text-white leading-none"
+      style={{ backgroundColor: color ?? "#71717a" }}
+    >
+      {children}
     </span>
   );
 }
 
 function ArmorCard({ set }: { set: ArmorSet }) {
-  const [expanded, setExpanded] = useState(false);
-  const elementStyle = set.element ? ELEMENT_BG[set.element] : "bg-gray-700/20 border-gray-600/40 text-gray-300";
+  const [open, setOpen] = useState(false);
+  const src = SOURCE_TYPE_STYLES[set.sourceType];
 
   return (
     <div
-      className="bg-gray-800/60 border border-gray-700 rounded-xl overflow-hidden hover:border-gray-500 transition-colors cursor-pointer"
-      onClick={() => setExpanded(!expanded)}
+      className="border border-[var(--border)] rounded-lg bg-[var(--bg)] hover:border-[var(--text-subtle)] transition-colors cursor-pointer"
+      onClick={() => setOpen(!open)}
     >
       <div className="p-4">
-        <div className="flex items-start justify-between gap-3 mb-3">
-          <div className="flex items-center gap-2 min-w-0">
-            {set.element && (
-              <span className="text-xl shrink-0">{ELEMENT_ICONS[set.element]}</span>
-            )}
-            <div className="min-w-0">
-              <h3 className="font-bold text-white text-sm leading-tight truncate">{set.name}</h3>
+        <div className="flex items-start justify-between gap-2 mb-2">
+          <div className="min-w-0">
+            <div className="flex items-center gap-1.5 mb-0.5">
+              {set.element && (
+                <span className="text-[var(--text-subtle)] text-xs">{ELEMENT_ICONS[set.element]}</span>
+              )}
+              <h3 className="text-sm font-medium text-[var(--text)] truncate">{set.name}</h3>
               {set.notable && (
-                <span className="text-xs text-yellow-400 font-medium">★ Notable Synergy</span>
+                <span className="text-[10px] text-amber-500 font-medium shrink-0">★</span>
               )}
             </div>
+            <span className="text-[10px] text-[var(--text-subtle)]">{src.icon} {set.sourceType}</span>
           </div>
           {set.element && (
-            <span className={`shrink-0 px-2 py-0.5 rounded border text-xs font-medium ${elementStyle}`}>
+            <span className="shrink-0 text-[10px] text-[var(--text-subtle)] border border-[var(--border)] px-1.5 py-0.5 rounded font-mono">
               {set.element}
             </span>
           )}
         </div>
 
-        {(() => {
-          const st = SOURCE_TYPE_STYLES[set.sourceType];
-          return (
-            <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium mb-2 ${st.bg} ${st.text}`}>
-              {st.icon} {set.sourceType}
-            </div>
-          );
-        })()}
-
         <div className="flex flex-wrap gap-1 mb-3">
           {set.synergies.map((s) => (
-            <SynergyBadge key={s} synergy={s} />
+            <Badge key={s} color={SYNERGY_COLORS[s]}>{s}</Badge>
           ))}
         </div>
 
-        <div className="space-y-2">
-          <div className="text-xs text-gray-300">
-            <span className="text-gray-500 font-semibold">2-PIECE  </span>
-            {set.twoPiece}
-          </div>
-          {expanded && (
-            <div className="text-xs text-gray-300">
-              <span className="text-gray-500 font-semibold">4-PIECE  </span>
+        <p className="text-xs text-[var(--text-muted)] leading-relaxed">
+          <span className="text-[var(--text-subtle)] font-medium mr-1">2pc</span>
+          {set.twoPiece}
+        </p>
+
+        {open && (
+          <div className="mt-2 pt-2 border-t border-[var(--border)] space-y-1.5">
+            <p className="text-xs text-[var(--text-muted)] leading-relaxed">
+              <span className="text-[var(--text-subtle)] font-medium mr-1">4pc</span>
               {set.fourPiece}
-            </div>
-          )}
-        </div>
+            </p>
+            <p className="text-xs text-[var(--text-subtle)]">
+              <span className="font-medium mr-1">Source</span>
+              {set.source}
+            </p>
+          </div>
+        )}
       </div>
-
-      {expanded && (
-        <div className="px-4 py-2 bg-gray-900/50 border-t border-gray-700 space-y-1">
-          <p className="text-xs text-gray-500">
-            <span className="text-gray-400 font-semibold">SOURCE  </span>
-            {set.source}
-          </p>
-        </div>
-      )}
-
-      <div className="px-4 py-1.5 bg-gray-900/30 border-t border-gray-700/50">
-        <span className="text-xs text-gray-600">{expanded ? "▲ collapse" : "▼ show 4-piece & source"}</span>
+      <div className="px-4 py-2 border-t border-[var(--border)] bg-[var(--bg-subtle)] rounded-b-lg">
+        <span className="text-[10px] text-[var(--text-subtle)]">{open ? "▲ collapse" : "▼ expand"}</span>
       </div>
     </div>
   );
@@ -115,230 +89,175 @@ function ArmorCard({ set }: { set: ArmorSet }) {
 
 export default function Destiny2Page() {
   const [search, setSearch] = useState("");
-  const [selectedElement, setSelectedElement] = useState<string | null>(null);
-  const [selectedSynergy, setSelectedSynergy] = useState<string | null>(null);
-  const [selectedSourceType, setSelectedSourceType] = useState<SourceType | null>(null);
-  const [notableOnly, setNotableOnly] = useState(false);
+  const [element, setElement] = useState<string | null>(null);
+  const [synergy, setSynergy] = useState<string | null>(null);
+  const [sourceType, setSourceType] = useState<SourceType | null>(null);
+  const [notable, setNotable] = useState(false);
 
-  const filtered = useMemo(() => {
-    return ARMOR_SETS.filter((set) => {
-      if (notableOnly && !set.notable) return false;
-      if (selectedElement && set.element !== selectedElement) return false;
-      if (selectedSynergy && !set.synergies.includes(selectedSynergy as Synergy)) return false;
-      if (selectedSourceType && set.sourceType !== selectedSourceType) return false;
-      if (search) {
-        const q = search.toLowerCase();
-        return (
-          set.name.toLowerCase().includes(q) ||
-          set.twoPiece.toLowerCase().includes(q) ||
-          set.fourPiece.toLowerCase().includes(q) ||
-          set.source.toLowerCase().includes(q) ||
-          set.synergies.some((s) => s.toLowerCase().includes(q))
-        );
-      }
-      return true;
-    });
-  }, [search, selectedElement, selectedSynergy, selectedSourceType, notableOnly]);
+  const filtered = useMemo(() => ARMOR_SETS.filter((s) => {
+    if (notable && !s.notable) return false;
+    if (element && s.element !== element) return false;
+    if (synergy && !s.synergies.includes(synergy as Synergy)) return false;
+    if (sourceType && s.sourceType !== sourceType) return false;
+    if (search) {
+      const q = search.toLowerCase();
+      return (
+        s.name.toLowerCase().includes(q) ||
+        s.twoPiece.toLowerCase().includes(q) ||
+        s.fourPiece.toLowerCase().includes(q) ||
+        s.source.toLowerCase().includes(q) ||
+        s.synergies.some((x) => x.toLowerCase().includes(q))
+      );
+    }
+    return true;
+  }), [search, element, synergy, sourceType, notable]);
 
-  const clearFilters = () => {
-    setSearch("");
-    setSelectedElement(null);
-    setSelectedSynergy(null);
-    setSelectedSourceType(null);
-    setNotableOnly(false);
-  };
-
-  const hasFilters = search || selectedElement || selectedSynergy || selectedSourceType || notableOnly;
+  const clear = () => { setSearch(""); setElement(null); setSynergy(null); setSourceType(null); setNotable(false); };
+  const hasFilters = search || element || synergy || sourceType || notable;
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
-      {/* Header */}
-      <header className="sticky top-0 z-10 bg-gray-950/95 backdrop-blur border-b border-gray-800 px-4 py-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center gap-3 mb-4">
-            <Link href="/" className="text-gray-500 hover:text-gray-300 text-sm transition-colors">
-              ← LifeDash
+    <div className="flex-1 flex flex-col">
+      <header className="border-b border-[var(--border)] sticky top-0 z-10 bg-[var(--bg)]/95 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-6 h-12 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3 min-w-0">
+            <Link href="/" className="text-xs text-[var(--text-subtle)] hover:text-[var(--text-muted)] transition-colors shrink-0">
+              ← Back
             </Link>
-            <span className="text-gray-700">/</span>
-            <span className="text-gray-300 text-sm font-medium">Destiny 2</span>
+            <span className="text-[var(--border)]">|</span>
+            <span className="text-sm font-medium text-[var(--text)] truncate">Destiny 2 — Armor Database</span>
+            <span className="text-xs text-[var(--text-subtle)] shrink-0">
+              {filtered.length}/{ARMOR_SETS.length}
+            </span>
           </div>
-          <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-black tracking-tight text-white">
-                <span className="text-orange-400">DESTINY 2</span> ARMOR DATABASE
-              </h1>
-              <p className="text-gray-500 text-sm mt-0.5">
-                {filtered.length} of {ARMOR_SETS.length} armor sets — click any card to expand
-              </p>
-            </div>
+          <div className="flex items-center gap-2 shrink-0">
             {hasFilters && (
               <button
-                onClick={clearFilters}
-                className="text-xs text-gray-400 border border-gray-700 px-3 py-1.5 rounded-lg hover:border-gray-500 hover:text-gray-200 transition-colors"
+                onClick={clear}
+                className="text-xs text-[var(--text-subtle)] hover:text-[var(--text-muted)] transition-colors"
               >
-                Clear all filters
+                Clear
               </button>
             )}
+            <ThemeToggle />
           </div>
-
-          {/* Search */}
-          <div className="mt-3 relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">🔍</span>
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search sets, bonuses, sources, synergies…"
-              className="w-full bg-gray-800 border border-gray-700 rounded-lg pl-9 pr-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 transition-colors"
-            />
-            {search && (
-              <button
-                onClick={() => setSearch("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300"
-              >
-                ✕
-              </button>
-            )}
-          </div>
+        </div>
+        <div className="max-w-7xl mx-auto px-6 pb-3">
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search armor sets, bonuses, sources…"
+            className="w-full h-8 rounded-md border border-[var(--border)] bg-[var(--bg-subtle)] px-3 text-sm text-[var(--text)] placeholder:text-[var(--text-subtle)] outline-none focus:border-[var(--text-subtle)] transition-colors"
+          />
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="flex flex-col lg:flex-row gap-6">
-          {/* Sidebar Filters */}
-          <aside className="lg:w-56 shrink-0 space-y-5">
-            {/* Notable toggle */}
-            <div>
-              <button
-                onClick={() => setNotableOnly(!notableOnly)}
-                className={`w-full text-left px-3 py-2 rounded-lg border text-sm font-medium transition-colors ${
-                  notableOnly
-                    ? "bg-yellow-500/20 border-yellow-500/50 text-yellow-300"
-                    : "border-gray-700 text-gray-400 hover:border-gray-600 hover:text-gray-300"
-                }`}
+      <div className="max-w-7xl mx-auto px-6 py-6 flex gap-6 w-full">
+        <aside className="w-44 shrink-0 space-y-5">
+          <div>
+            <button
+              onClick={() => setNotable(!notable)}
+              className={`w-full text-left text-xs px-2 py-1.5 rounded border transition-colors ${
+                notable
+                  ? "border-amber-400 text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/30"
+                  : "border-[var(--border)] text-[var(--text-muted)] hover:border-[var(--text-subtle)]"
+              }`}
+            >
+              ★ Notable only
+            </button>
+          </div>
+
+          <FilterSection label="Element">
+            {ALL_ELEMENTS.map((el) => (
+              <FilterButton
+                key={el}
+                active={element === el}
+                onClick={() => setElement(element === el ? null : el)}
               >
-                ★ Notable Synergies Only
-              </button>
-            </div>
+                {ELEMENT_ICONS[el]} {el}
+              </FilterButton>
+            ))}
+          </FilterSection>
 
-            {/* Element filter */}
-            <div>
-              <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Element</h3>
-              <div className="space-y-1">
-                {ALL_ELEMENTS.map((el) => (
-                  <button
-                    key={el}
-                    onClick={() => setSelectedElement(selectedElement === el ? null : el)}
-                    className={`w-full text-left px-3 py-1.5 rounded-lg text-sm transition-colors flex items-center gap-2 ${
-                      selectedElement === el
-                        ? `${ELEMENT_BG[el]} border font-medium`
-                        : "text-gray-400 hover:text-gray-200 hover:bg-gray-800"
-                    }`}
-                  >
-                    <span>{ELEMENT_ICONS[el]}</span>
-                    {el}
-                  </button>
-                ))}
-              </div>
-            </div>
+          <FilterSection label="Source">
+            {ALL_SOURCE_TYPES.map((st) => {
+              const s = SOURCE_TYPE_STYLES[st];
+              return (
+                <FilterButton
+                  key={st}
+                  active={sourceType === st}
+                  onClick={() => setSourceType(sourceType === st ? null : st)}
+                >
+                  {s.icon} {st}
+                </FilterButton>
+              );
+            })}
+          </FilterSection>
 
-            {/* Source Type filter */}
-            <div>
-              <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Source / Destination</h3>
-              <div className="space-y-1">
-                {ALL_SOURCE_TYPES.map((st) => {
-                  const style = SOURCE_TYPE_STYLES[st];
-                  const isSelected = selectedSourceType === st;
+          {Object.entries(ALL_SYNERGY_CATEGORIES).map(([cat, syns]) => (
+            <div key={cat}>
+              <p className="text-[10px] font-medium text-[var(--text-subtle)] uppercase tracking-widest mb-1.5">{cat}</p>
+              <div className="flex flex-wrap gap-1">
+                {syns.map((s) => {
+                  const isActive = synergy === s;
                   return (
                     <button
-                      key={st}
-                      onClick={() => setSelectedSourceType(isSelected ? null : st)}
-                      className={`w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors flex items-center gap-2 ${
-                        isSelected
-                          ? `${style.bg} ${style.text} font-medium`
-                          : "text-gray-400 hover:text-gray-200 hover:bg-gray-800"
-                      }`}
+                      key={s}
+                      onClick={() => setSynergy(isActive ? null : s)}
+                      className="text-[10px] px-1.5 py-0.5 rounded font-medium text-white transition-opacity"
+                      style={{
+                        backgroundColor: SYNERGY_COLORS[s] ?? "#71717a",
+                        opacity: isActive ? 1 : 0.45,
+                      }}
                     >
-                      <span>{style.icon}</span>
-                      {st}
+                      {s}
                     </button>
                   );
                 })}
               </div>
             </div>
+          ))}
+        </aside>
 
-            {/* Synergy filter */}
-            {Object.entries(ALL_SYNERGY_CATEGORIES).map(([category, synergies]) => (
-              <div key={category}>
-                <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{category}</h3>
-                <div className="flex flex-wrap gap-1">
-                  {synergies.map((s) => {
-                    const color = SYNERGY_COLORS[s] ?? "bg-gray-500";
-                    const isSelected = selectedSynergy === s;
-                    return (
-                      <button
-                        key={s}
-                        onClick={() => setSelectedSynergy(isSelected ? null : s)}
-                        className={`px-2 py-0.5 rounded text-xs font-medium text-white transition-opacity ${color} ${
-                          isSelected ? "ring-2 ring-white opacity-100" : "opacity-60 hover:opacity-100"
-                        }`}
-                      >
-                        {s}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-          </aside>
-
-          {/* Grid */}
-          <main className="flex-1 min-w-0">
-            {filtered.length === 0 ? (
-              <div className="text-center py-20 text-gray-600">
-                <p className="text-4xl mb-3">🔍</p>
-                <p className="text-lg font-medium text-gray-500">No armor sets found</p>
-                <p className="text-sm mt-1">Try adjusting your search or filters</p>
-                <button onClick={clearFilters} className="mt-4 text-orange-400 hover:text-orange-300 text-sm underline">
-                  Clear all filters
-                </button>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
-                {filtered.map((set) => (
-                  <ArmorCard key={set.id} set={set} />
-                ))}
-              </div>
-            )}
-          </main>
-        </div>
-
-        {/* Notable Synergies Legend */}
-        <section className="mt-10 bg-gray-900 border border-gray-800 rounded-xl p-5">
-          <h2 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Notable Synergy Groups</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs text-gray-400">
-            {[
-              { element: "Solar", sets: ["Seventh Seraph", "Apostate's Blade", "Collective Psyche"], icon: "☀️" },
-              { element: "Void", sets: ["Luminopotent", "Circuit", "Taken King"], icon: "🌀" },
-              { element: "Arc", sets: ["Veritas", "Eutechnology", "Nezarec's Nightmares", "Oryx's Memory", "Kentarch 3"], icon: "⚡" },
-              { element: "Stasis", sets: ["Crystocrene", "Techsun's Regalia", "Yearning Echo"], icon: "❄️" },
-              { element: "Strand", sets: ["Thunderhead", "Flain", "Dark Age", "Sage Protector", "Thriving Survivor"], icon: "🌿" },
-              { element: "Prismatic", sets: ["Aion Adapter", "Aion Renewal", "Wayward Psyche"], icon: "💎" },
-            ].map(({ element, sets, icon }) => (
-              <div key={element} className="space-y-1">
-                <div className={`font-semibold text-sm ${ELEMENT_BG[element]} inline-flex items-center gap-1 px-2 py-0.5 rounded border`}>
-                  {icon} {element}
-                </div>
-                <ul className="space-y-0.5 pl-1">
-                  {sets.map((s) => (
-                    <li key={s} className="text-gray-500">• {s} Set</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </section>
+        <main className="flex-1 min-w-0">
+          {filtered.length === 0 ? (
+            <div className="text-center py-24">
+              <p className="text-sm text-[var(--text-muted)]">No armor sets found.</p>
+              <button onClick={clear} className="mt-2 text-xs text-[var(--text-subtle)] hover:text-[var(--text-muted)] underline transition-colors">
+                Clear filters
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+              {filtered.map((set) => <ArmorCard key={set.id} set={set} />)}
+            </div>
+          )}
+        </main>
       </div>
     </div>
+  );
+}
+
+function FilterSection({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <p className="text-[10px] font-medium text-[var(--text-subtle)] uppercase tracking-widest mb-1.5">{label}</p>
+      <div className="space-y-0.5">{children}</div>
+    </div>
+  );
+}
+
+function FilterButton({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`w-full text-left text-xs px-2 py-1 rounded transition-colors ${
+        active
+          ? "bg-[var(--text)] text-[var(--bg)] font-medium"
+          : "text-[var(--text-muted)] hover:bg-[var(--bg-muted)] hover:text-[var(--text)]"
+      }`}
+    >
+      {children}
+    </button>
   );
 }

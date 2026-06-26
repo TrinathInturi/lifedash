@@ -1,41 +1,23 @@
 @import "tailwindcss";
 
-/* iOS system font stack */
 :root {
-  --ios-blue: #007AFF;
-  --ios-bg: #F2F2F7;
-  --ios-bg2: #ffffff;
-  --ios-bg3: #ffffff;
-  --ios-label: #000000;
-  --ios-label2: #3c3c43;
-  --ios-label3: #3c3c4399;
-  --ios-label4: #3c3c432e;
-  --ios-separator: #3c3c4349;
-  --ios-fill: #78788052;
-  --ios-fill2: #78788029;
-  --ios-fill3: #7878801f;
-  --ios-fill4: #7478801a;
-  --ios-grouped-bg: #F2F2F7;
-  --ios-grouped-bg2: #ffffff;
-  --ios-grouped-bg3: #F2F2F7;
+  --bg: #ffffff;
+  --bg-subtle: #fafafa;
+  --bg-muted: #f4f4f5;
+  --border: #e4e4e7;
+  --text: #09090b;
+  --text-muted: #71717a;
+  --text-subtle: #a1a1aa;
 }
 
 html.dark {
-  --ios-bg: #000000;
-  --ios-bg2: #1c1c1e;
-  --ios-bg3: #2c2c2e;
-  --ios-label: #ffffff;
-  --ios-label2: #ebebf5;
-  --ios-label3: #ebebf599;
-  --ios-label4: #ebebf52e;
-  --ios-separator: #54545899;
-  --ios-fill: #7878805c;
-  --ios-fill2: #78788033;
-  --ios-fill3: #7878802e;
-  --ios-fill4: #7478802a;
-  --ios-grouped-bg: #000000;
-  --ios-grouped-bg2: #1c1c1e;
-  --ios-grouped-bg3: #2c2c2e;
+  --bg: #09090b;
+  --bg-subtle: #111113;
+  --bg-muted: #18181b;
+  --border: #27272a;
+  --text: #fafafa;
+  --text-muted: #a1a1aa;
+  --text-subtle: #52525b;
 }
 
 @theme inline {
@@ -43,22 +25,15 @@ html.dark {
   --font-mono: var(--font-geist-mono);
 }
 
-* {
+*, *::before, *::after {
+  box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  background: var(--ios-grouped-bg);
-  color: var(--ios-label);
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
-  transition: background 0.25s ease, color 0.25s ease;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-* {
-  -webkit-tap-highlight-color: transparent;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-geist-sans, "Inter", system-ui, sans-serif);
+  transition: background 0.2s, color 0.2s;
 }
