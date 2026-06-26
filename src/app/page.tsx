@@ -1,70 +1,213 @@
 import Link from "next/link";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const widgets = [
-  { title: "Tasks", description: "Manage your daily tasks and to-dos", icon: "✓", href: "#", color: "bg-blue-500" },
-  { title: "Journal", description: "Write and reflect on your day", icon: "📓", href: "#", color: "bg-purple-500" },
-  { title: "Goals", description: "Track your long-term goals and habits", icon: "🎯", href: "#", color: "bg-green-500" },
-  { title: "Finance", description: "Monitor your budget and expenses", icon: "💰", href: "#", color: "bg-yellow-500" },
-  { title: "Health", description: "Log workouts, sleep, and wellness", icon: "❤️", href: "#", color: "bg-red-500" },
-  { title: "Notes", description: "Capture ideas and quick notes", icon: "📝", href: "#", color: "bg-indigo-500" },
-  { title: "Destiny 2", description: "Searchable armor set bonuses & synergies database", icon: "🎮", href: "/destiny2", color: "bg-orange-500" },
+  {
+    title: "Tasks",
+    description: "Manage your daily tasks and to-dos",
+    icon: "✓",
+    href: "#",
+    gradient: "from-blue-500 to-blue-600",
+    ring: "ring-blue-500/20",
+    iconBg: "bg-blue-500",
+    tag: "Coming soon",
+  },
+  {
+    title: "Journal",
+    description: "Write and reflect on your day",
+    icon: "📓",
+    href: "#",
+    gradient: "from-purple-500 to-purple-600",
+    ring: "ring-purple-500/20",
+    iconBg: "bg-purple-500",
+    tag: "Coming soon",
+  },
+  {
+    title: "Goals",
+    description: "Track long-term goals and habits",
+    icon: "🎯",
+    href: "#",
+    gradient: "from-emerald-500 to-emerald-600",
+    ring: "ring-emerald-500/20",
+    iconBg: "bg-emerald-500",
+    tag: "Coming soon",
+  },
+  {
+    title: "Finance",
+    description: "Monitor your budget and expenses",
+    icon: "💰",
+    href: "#",
+    gradient: "from-yellow-500 to-orange-500",
+    ring: "ring-yellow-500/20",
+    iconBg: "bg-yellow-500",
+    tag: "Coming soon",
+  },
+  {
+    title: "Health",
+    description: "Log workouts, sleep, and wellness",
+    icon: "❤️",
+    href: "#",
+    gradient: "from-red-500 to-rose-600",
+    ring: "ring-red-500/20",
+    iconBg: "bg-red-500",
+    tag: "Coming soon",
+  },
+  {
+    title: "Notes",
+    description: "Capture ideas and quick notes",
+    icon: "📝",
+    href: "#",
+    gradient: "from-indigo-500 to-indigo-600",
+    ring: "ring-indigo-500/20",
+    iconBg: "bg-indigo-500",
+    tag: "Coming soon",
+  },
+  {
+    title: "Destiny 2",
+    description: "Searchable armor set bonuses & synergies database",
+    icon: "🎮",
+    href: "/destiny2",
+    gradient: "from-orange-500 to-red-500",
+    ring: "ring-orange-500/20",
+    iconBg: "bg-orange-500",
+    tag: "Live",
+  },
 ];
 
 export default function Home() {
   const today = new Date().toLocaleDateString("en-US", {
-    weekday: "long", year: "numeric", month: "long", day: "numeric",
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   });
 
+  const liveWidgets = widgets.filter((w) => w.tag === "Live");
+  const comingWidgets = widgets.filter((w) => w.tag !== "Live");
+
   return (
-    <main className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4">
+    <main className="flex-1">
+      {/* Header */}
+      <header className="sticky top-0 z-20 border-b border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md px-6 py-3">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">LifeDash</h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400">{today}</p>
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center shadow-sm">
+              <span className="text-white text-sm font-bold">L</span>
+            </div>
+            <span className="font-bold text-lg text-zinc-900 dark:text-white tracking-tight">LifeDash</span>
           </div>
-          <button className="px-4 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg text-sm font-medium hover:opacity-80 transition-opacity">
-            + New Block
-          </button>
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <button className="px-4 py-1.5 text-sm font-medium rounded-lg bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:opacity-80 transition-opacity shadow-sm">
+              + New Block
+            </button>
+          </div>
         </div>
       </header>
 
-      <div className="max-w-6xl mx-auto px-6 py-10">
-        <section className="mb-10">
-          <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-1">Good day! 👋</h2>
-          <p className="text-gray-500 dark:text-gray-400 text-sm">Your personal life dashboard. Stay organized, focused, and on track.</p>
+      <div className="max-w-6xl mx-auto px-6 py-12">
+        {/* Hero */}
+        <section className="mb-12">
+          <p className="text-xs font-semibold text-violet-500 dark:text-violet-400 uppercase tracking-widest mb-2">{today}</p>
+          <h1 className="text-4xl sm:text-5xl font-black text-zinc-900 dark:text-white tracking-tight leading-tight mb-3">
+            Good day 👋
+          </h1>
+          <p className="text-zinc-500 dark:text-zinc-400 text-lg max-w-xl">
+            Your personal life dashboard. Stay organized, focused, and on track.
+          </p>
         </section>
 
+        {/* Stats bar */}
+        <section className="mb-10 grid grid-cols-2 sm:grid-cols-4 gap-4">
+          {[
+            { label: "Total Modules", value: widgets.length.toString() },
+            { label: "Live", value: liveWidgets.length.toString() },
+            { label: "In Progress", value: "0" },
+            { label: "Coming Soon", value: comingWidgets.length.toString() },
+          ].map((stat) => (
+            <div
+              key={stat.label}
+              className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-5 py-4"
+            >
+              <p className="text-2xl font-black text-zinc-900 dark:text-white">{stat.value}</p>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5 font-medium">{stat.label}</p>
+            </div>
+          ))}
+        </section>
+
+        {/* Live modules */}
+        {liveWidgets.length > 0 && (
+          <section className="mb-10">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <h2 className="text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest">Live</h2>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {liveWidgets.map((widget) => (
+                <WidgetCard key={widget.title} widget={widget} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* All modules */}
         <section className="mb-10">
-          <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">Dashboard</h3>
+          <h2 className="text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest mb-4">All Modules</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {widgets.map((widget) => (
-              <Link key={widget.title} href={widget.href}
-                className="group bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 hover:shadow-md transition-shadow flex items-start gap-4"
-              >
-                <div className={`${widget.color} text-white rounded-lg w-10 h-10 flex items-center justify-center text-lg shrink-0`}>
-                  {widget.icon}
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                    {widget.title}
-                  </h4>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{widget.description}</p>
-                </div>
-              </Link>
+            {comingWidgets.map((widget) => (
+              <WidgetCard key={widget.title} widget={widget} />
             ))}
           </div>
         </section>
 
-        <section className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Quick Note</h3>
+        {/* Quick Note */}
+        <section className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-semibold text-zinc-900 dark:text-white">Quick Note</h3>
+            <span className="text-xs text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded-full">Coming soon</span>
+          </div>
           <textarea
-            className="w-full h-32 text-sm text-gray-700 dark:text-gray-300 bg-transparent resize-none outline-none placeholder-gray-400"
-            placeholder="Start typing a note… (coming soon)"
+            className="w-full h-28 text-sm text-zinc-700 dark:text-zinc-300 bg-transparent resize-none outline-none placeholder-zinc-400 dark:placeholder-zinc-600"
+            placeholder="Start typing a note…"
             disabled
           />
         </section>
       </div>
     </main>
+  );
+}
+
+function WidgetCard({ widget }: { widget: typeof widgets[0] }) {
+  const isLive = widget.tag === "Live";
+  return (
+    <Link
+      href={widget.href}
+      className={`group relative flex items-start gap-4 p-5 rounded-2xl border transition-all duration-200
+        border-zinc-200 dark:border-zinc-800
+        bg-white dark:bg-zinc-900
+        hover:border-zinc-300 dark:hover:border-zinc-700
+        hover:shadow-lg dark:hover:shadow-zinc-950/50
+        ${!isLive ? "opacity-60 cursor-default pointer-events-none" : ""}
+      `}
+    >
+      <div className={`${widget.iconBg} shrink-0 w-11 h-11 rounded-xl flex items-center justify-center text-xl shadow-sm`}>
+        {widget.icon}
+      </div>
+      <div className="min-w-0 flex-1">
+        <div className="flex items-start justify-between gap-2">
+          <h3 className="font-semibold text-zinc-900 dark:text-white group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors text-sm">
+            {widget.title}
+          </h3>
+          <span className={`shrink-0 text-xs font-medium px-2 py-0.5 rounded-full ${
+            isLive
+              ? "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400"
+              : "bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400"
+          }`}>
+            {widget.tag}
+          </span>
+        </div>
+        <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1 leading-relaxed">{widget.description}</p>
+      </div>
+    </Link>
   );
 }
